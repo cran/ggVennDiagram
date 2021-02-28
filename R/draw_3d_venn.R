@@ -1,7 +1,7 @@
 #' @rdname draw_venn
 draw_3d_venn <- function(x, n.sides, category.names, label,...){
   category <- data.frame(x = c(2, -3.5, 7.5),
-                         y = c(8.5, -3.5, -3.5),
+                         y = c(8.5, -4.6, -4.6),
                          label = category.names)
 
   region_data <- three_dimension_circle_regions(n.sides)
@@ -12,6 +12,7 @@ draw_3d_venn <- function(x, n.sides, category.names, label,...){
 }
 
 #' @rdname  region_polygon
+#' @export
 three_dimension_circle_regions <- function(n.sides=1000){
   # three circles
   parameters <- list(c(2,4,4),c(0,0,4),c(4,0,4))
@@ -49,9 +50,8 @@ three_dimension_circle_regions <- function(n.sides=1000){
   list(data_ploygons, data_centers)
 }
 
-
-#' @rdname region_value
-three_dimension_region_values <- function(x){
+#' @rdname region_item
+three_dimension_region_items <- function(x){
   a <- x[[1]]
   b <- x[[2]]
   c <- x[[3]]
@@ -64,9 +64,13 @@ three_dimension_region_values <- function(x){
   BC <- setdiff(intersect(b,c),a)
   ABC <- multi_intersect(a,b,c)
 
-  items <- list(A=A,B=B,C=C,AB=AB,AC=AC,BC=BC,ABC=ABC)
+  list(A=A,B=B,C=C,AB=AB,AC=AC,BC=BC,ABC=ABC)
+}
 
-  values <- sapply(items, length)
+#' @rdname region_value
+three_dimension_region_values <- function(x){
+  items <- three_dimension_region_items(x)
 
-  data.frame(group=names(items),count=values, stringsAsFactors = F)
+  region_values(items)
+
 }

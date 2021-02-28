@@ -1,4 +1,4 @@
-#' draw 2d, 3d, and 4d venn diagram
+#' draw 2d, 3d, and 4d Venn diagram
 #'
 #' @param x a list of items
 #' @param n.sides  resolution
@@ -9,8 +9,8 @@
 #' @name draw_venn
 draw_4d_venn <- function(x, n.sides, category.names, label,...){
 
-  category <- data.frame(x = c(0.13, 0.26, 0.71, 0.86),
-                         y = c(0.77, 0.86, 0.85, 0.77),
+  category <- data.frame(x = c(0.08, 0.26, 0.71, 0.93),
+                         y = c(0.78, 0.86, 0.85, 0.78),
                          label = category.names)
 
   region_data <- four_dimension_ellipse_regions(n.sides)
@@ -23,13 +23,13 @@ draw_4d_venn <- function(x, n.sides, category.names, label,...){
 
 }
 
-#' calculating intersection values of venn
+#' get the items in each region
 #'
-#' @param x a list of vector items.
+#' @param x a list of vector items
 #'
-#' @return data.frame
-#' @name region_value
-four_dimension_region_values <- function(x){
+#' @return  a list
+#' @name region_item
+four_dimension_region_items <- function(x){
 
   # values
   a <- x[[1]]
@@ -53,21 +53,52 @@ four_dimension_region_values <- function(x){
   BCD <- setdiff(intersect(intersect(d,b),c),a)
   ABCD <- intersect(intersect(intersect(a,b),c),d)
 
-  items <- list(A=A,B=B,C=C,D=D,AB=AB,AC=AC,AD=AD,BC=BC,BD=BD,CD=CD,ABC=ABC,ABD=ABD,ACD=ACD,BCD=BCD,ABCD=ABCD)
-
-  values <- sapply(items, length)
-  data.frame(group=names(items),count=values,stringsAsFactors = F)
+  list(A=A,B=B,C=C,D=D,AB=AB,AC=AC,AD=AD,BC=BC,BD=BD,CD=CD,ABC=ABC,ABD=ABD,ACD=ACD,BCD=BCD,ABCD=ABCD)
 }
 
-#' coordinations of polygon regions/centers for venn diagram
+#' calculating intersection values of venn
+#'
+#' @param x a list of vector items.
+#'
+#' @return data.frame
+#' @name region_value
+four_dimension_region_values <- function(x){
+
+  items <- four_dimension_region_items(x)
+
+  region_values(items)
+}
+
+
+region_values <- function(items){
+  values <- sapply(items, length)
+
+  group_items <- sapply(items, function(x){
+    sep = "; "
+    x <- paste0(x, collapse = sep)
+    x <- stringr::str_wrap(x)
+    return(x)
+  })
+
+  data.frame(group=names(items),count=values, text=group_items,stringsAsFactors = F)
+
+}
+
+#' Coordinates of polygon regions/centers for venn diagram
 #'
 #' @inheritParams draw_venn
 #'
 #' @importFrom VennDiagram ell2poly
 #' @importFrom sf st_polygon st_difference st_intersection st_centroid st_union
 #' @import dplyr
+#' @export
+#' @return a list of two data.frame, the first one represents polygon regions, and the second specifies polygon centers.
 #' @name region_polygon
-four_dimension_ellipse_regions <- function(n.sides){
+#' @examples
+#' library(ggplot2)
+#' polygons <- four_dimension_ellipse_regions(3000)[[1]]
+#' ggplot(polygons,aes(x,y,group=group,fill=group)) + geom_polygon()
+four_dimension_ellipse_regions <- function(n.sides=1000){
 
   # ellipse
   parameters <- list(c(0.35, 0.47, 0.35, 0.20, 135),

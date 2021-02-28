@@ -1,7 +1,7 @@
 #' @rdname draw_venn
 draw_2d_venn <- function(x, n.sides, category.names, label,...){
-  category <- data.frame(x = c(-4, 8),
-                         y = c(4, 4),
+  category <- data.frame(x = c(-1, 5),
+                         y = 4.3,
                          label = category.names)
 
   region_data <- two_dimension_circle_regions(n.sides)
@@ -12,6 +12,7 @@ draw_2d_venn <- function(x, n.sides, category.names, label,...){
 }
 
 #' @rdname region_polygon
+#' @export
 two_dimension_circle_regions <- function(n.sides=1000){
   # two circles
   parameters <- list(c(0,0,4),c(4,0,4))
@@ -45,9 +46,8 @@ two_dimension_circle_regions <- function(n.sides=1000){
   list(data_ploygons, data_centers)
 }
 
-
-#' @rdname region_value
-two_dimension_region_values <- function(x){
+#' @rdname region_item
+two_dimension_region_items <- function(x){
   a <- x[[1]]
   b <- x[[2]]
 
@@ -55,9 +55,13 @@ two_dimension_region_values <- function(x){
   B <- setdiff(b, a)
   AB <- intersect(a,b)
 
-  items <- list(A=A,B=B,AB=AB)
+  list(A=A,B=B,AB=AB)
+}
 
-  values <- sapply(items, length)
+#' @rdname region_value
+two_dimension_region_values <- function(x){
+  items <- two_dimension_region_items(x)
 
-  data.frame(group=names(items),count=values, stringsAsFactors = F)
+  region_values(items)
+
 }
