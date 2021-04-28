@@ -5,35 +5,32 @@
 \title{plot codes}
 \usage{
 plot_venn(
-  region_data,
-  category,
-  counts,
-  show_intersect,
-  label,
-  label_geom,
-  label_alpha,
-  ...
+  x,
+  show_intersect = FALSE,
+  label = "count",
+  label_geom = "label",
+  label_alpha = 0.3,
+  percent_digit = 0,
+  txtWidth = 40
 )
 }
 \arguments{
-\item{region_data}{a list of two dataframes, which were used to plot polygon and label latter.}
+\item{x}{list of items}
 
-\item{category}{name of Set}
+\item{show_intersect}{if TRUE the text can be visualized by `plotly`}
 
-\item{counts}{counts of items for every combinations}
+\item{label}{select one from c("count","percent","both","none")}
 
-\item{show_intersect}{whether add a hidden text to polygons in the plot, the text can be further visualized by `plotly::ggplotly()`}
-
-\item{label}{select one from c("count","percent","both")}
-
-\item{label_geom}{choose from geom_label and geom_text}
+\item{label_geom}{choose from c("label", "text")}
 
 \item{label_alpha}{set 0 to remove label background}
 
-\item{...}{Other arguments passed on to the polygon layer.}
+\item{percent_digit}{number of digits when formating percent label (0)}
+
+\item{txtWidth}{width of text used in showing intersect members (40)}
 }
 \value{
-ggplot object
+ggplot object, or plotly object if show_intersect is TRUE
 }
 \description{
 plot codes
