@@ -4,6 +4,11 @@
 # ggVennDiagram
 
 <!-- badges: start -->
+
+[![](http://cranlogs.r-pkg.org/badges/last-month/ggVennDiagram?color=green)](https://cran.r-project.org/package=ggVennDiagram)
+[![](https://www.r-pkg.org/badges/version/ggVennDiagram?color=green)](https://cran.r-project.org/package=ggVennDiagram)
+[![](https://img.shields.io/badge/devel%20version-1.1.0-green.svg)](https://github.com/gaospecial/ggVennDiagram)
+[![](https://codecov.io/gh/gaospecial/ggVennDiagram/branch/master/graph/badge.svg?token=c365345d-e34c-40f6-b2c0-881b5b2841e7)](https://codecov.io/gh/gaospecial/ggVennDiagram)
 <!-- badges: end -->
 
 ‘`ggVennDiagram`’ enables fancy Venn plot with 2-7 sets and generates
@@ -45,6 +50,7 @@ further modified with `ggplot` functions.
 
 ``` r
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.0.5
 ggVennDiagram(x) + scale_fill_gradient(low="blue",high = "red")
 ```
 
@@ -275,7 +281,16 @@ ggVennDiagram(x[1:2])
 
 <img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" />
 
-# “`ggVennDiagram`” 诞生记
+# Futher information
+
+## Venn Diagram cookbook in R
+
+I have released a online book to introduce the development of
+`ggVennDiagram`, it contains a chapter that compare many different R
+packages in plotting a Venn. Refer to [Venn Diagram cookbook in
+R](https://venn.bio-spring.info).
+
+## “`ggVennDiagram`” 诞生记
 
 在 *@GuangchuangYu* 的公众号下面，我投稿了一篇文章，介绍了
 “`ggVennDiagram`”
