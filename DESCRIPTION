@@ -1,7 +1,7 @@
 Package: ggVennDiagram
 Type: Package
 Title: A 'ggplot2' Implement of Venn Diagram
-Version: 1.1.4
+Version: 1.2.0
 Authors@R: c(
   person("Chun-Hui","Gao",email="gaospecial@gmail.com",role=c("aut","cre"), comment=c(ORCID = "0000-0002-1445-7939")),
   person("Guangchuang", "Yu", email = "guangchuangyu@gmail.com", role = c("ctb"), comment = c(ORCID = "0000-0002-6485-8781")),
@@ -26,9 +26,9 @@ Suggests: testthat (>= 2.1.0), knitr, rmarkdown, tidyr, venn,
         RColorBrewer
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2021-07-07 10:35:49 UTC; gaoch
+Packaged: 2021-10-19 19:01:53 UTC; gaoch
 Author: Chun-Hui Gao [aut, cre] (<https://orcid.org/0000-0002-1445-7939>),
   Guangchuang Yu [ctb] (<https://orcid.org/0000-0002-6485-8781>),
   Adrian Dusa [ctb]
 Repository: CRAN
-Date/Publication: 2021-07-07 10:50:02 UTC
+Date/Publication: 2021-10-22 09:20:09 UTC

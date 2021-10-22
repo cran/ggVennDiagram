@@ -5,10 +5,12 @@
 
 <!-- badges: start -->
 
+[![](http://cranlogs.r-pkg.org/badges/grand-total/ggVennDiagram?color=green)](https://cran.r-project.org/package=ggVennDiagram)
 [![](http://cranlogs.r-pkg.org/badges/last-month/ggVennDiagram?color=green)](https://cran.r-project.org/package=ggVennDiagram)
+[![](http://cranlogs.r-pkg.org/badges/last-week/ggVennDiagram?color=green)](https://cran.r-project.org/package=ggVennDiagram)
 [![](https://www.r-pkg.org/badges/version/ggVennDiagram?color=green)](https://cran.r-project.org/package=ggVennDiagram)
-[![](https://img.shields.io/badge/devel%20version-1.1.3-green.svg)](https://github.com/gaospecial/ggVennDiagram)
-[![](https://codecov.io/gh/gaospecial/ggVennDiagram/branch/master/graph/badge.svg?token=c365345d-e34c-40f6-b2c0-881b5b2841e7)](https://codecov.io/gh/gaospecial/ggVennDiagram)
+[![](https://img.shields.io/badge/devel%20version-1.1.7-green.svg)](https://github.com/gaospecial/ggVennDiagram)
+[![](https://codecov.io/gh/gaospecial/ggVennDiagram/branch/master/graph/badge.svg?token=c365345d-e34c-40f6-b2c0-881b5b2841e7)](https://app.codecov.io/gh/gaospecial/ggVennDiagram)
 <!-- badges: end -->
 
 ‘`ggVennDiagram`’ enables fancy Venn plot with 2-7 sets and generates
@@ -29,6 +31,16 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("gaospecial/ggVennDiagram")
 ```
+
+## Citation
+
+If you find **ggVennDiagram** is useful and used it in academic papers,
+you may cite this package as:
+
+Gao, C.-H., Yu, G., and Cai, P. (2021). ggVennDiagram: An Intuitive,
+Easy-to-Use, and Highly Customizable R Package to Generate Venn Diagram.
+Frontiers in Genetics 12, 1598. doi:
+[10.3389/fgene.2021.706907](https://www.frontiersin.org/articles/10.3389/fgene.2021.706907/full).
 
 ## Example
 
@@ -287,7 +299,7 @@ ggVennDiagram(x[1:2])
 I have released a online book to introduce the development of
 `ggVennDiagram`, it contains a chapter that compare many different R
 packages in plotting a Venn. Refer to [Venn Diagram cookbook in
-R](https://venn.bio-spring.info).
+R](https://venn.bio-spring.top).
 
 ## 公众号文章
 

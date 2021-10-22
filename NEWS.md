@@ -1,3 +1,9 @@
+# ggVennDiagram 1.2
+
+* Paper published. doi: 10.3389/fgene.2021.706907
+* minor fixing of URL
+* minor changes
+
 # ggVennDiagram 1.1.4
 
 * minor changes and bug fixing
