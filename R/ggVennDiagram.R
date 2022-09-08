@@ -12,7 +12,7 @@
 #' @name ggVennDiagram-package
 NULL
 
-#' shapes: internal shape data
+#' shapes: shape data used to setup Venn plot
 #'
 #' a collection of geometric shapes, which defined the edge and label of sets in a Venn plot.
 #' use `plot_shapes()` to see some of them.
@@ -33,7 +33,7 @@ NULL
 #' - [Wiki](https://upload.wikimedia.org/wikipedia/commons/5/56/6-set_Venn_diagram_SMIL.svg)
 #' @md
 #' @name vennplot-shapes
-"shapes"
+NULL
 
 #' ggVennDiagram main parser
 #'
@@ -168,7 +168,7 @@ plot_venn <- function(x,
   if (show_intersect == TRUE){
     items <- data@region %>%
       dplyr::rowwise() %>%
-      dplyr::mutate(text = stringr::str_wrap(paste0(.data$item, collapse = " "),
+      dplyr::mutate(text = yulab.utils::str_wrap(paste0(.data$item, collapse = " "),
                                              width = label_txtWidth)) %>%
       sf::st_as_sf()
     label_coord = sf::st_centroid(items$geometry) %>% sf::st_coordinates()
