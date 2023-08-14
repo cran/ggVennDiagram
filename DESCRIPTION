@@ -1,7 +1,7 @@
 Package: ggVennDiagram
 Type: Package
 Title: A 'ggplot2' Implement of Venn Diagram
-Version: 1.2.2
+Version: 1.2.3
 Authors@R: c(
   person("Chun-Hui","Gao",email="gaospecial@gmail.com",role=c("aut","cre"), comment=c(ORCID = "0000-0002-1445-7939")),
   person("Guangchuang", "Yu", email = "guangchuangyu@gmail.com", role = c("ctb"), comment = c(ORCID = "0000-0002-6485-8781")),
@@ -21,14 +21,14 @@ Imports: sf, ggplot2, dplyr, magrittr, methods, purrr, tibble, plotly,
 URL: https://github.com/gaospecial/ggVennDiagram
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.3
 Suggests: testthat (>= 2.1.0), knitr, rmarkdown, tidyr, venn,
         RColorBrewer
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2022-09-08 07:38:33 UTC; gaoch
+Packaged: 2023-08-14 10:42:56 UTC; gaoch
 Author: Chun-Hui Gao [aut, cre] (<https://orcid.org/0000-0002-1445-7939>),
   Guangchuang Yu [ctb] (<https://orcid.org/0000-0002-6485-8781>),
   Adrian Dusa [ctb]
 Repository: CRAN
-Date/Publication: 2022-09-08 08:12:55 UTC
+Date/Publication: 2023-08-14 11:20:13 UTC
