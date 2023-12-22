@@ -1,3 +1,20 @@
+#' shapes: shape data used to setup Venn plot
+#'
+#' a collection of geometric shapes, which defined the edge and label of sets in a Venn plot.
+#' use `plot_shapes()` to see some of them.
+#'
+#' @format a list with several slots
+#'  see "?VennPlotData".
+#'
+#' @source
+#' - `venn:::sets`
+#' - `library("VennDiagram")`
+#' - [Wiki](https://upload.wikimedia.org/wikipedia/commons/5/56/6-set_Venn_diagram_SMIL.svg)
+#' @name vennplot-shapes
+#' @docType data
+#' @md
+NULL
+
 #' plot all shapes provided by internal dataset
 #'
 #' These shapes are mainly collected from the package `venn`, and `VennDiagram`.
@@ -16,15 +33,33 @@
 #' @examples
 #' plot_shapes()
 plot_shapes <- function(){
-  ids <- sort(unique(shapes$shape_id))
-  ids <- ids[ids != "601f"]
-  # windows()
-  par(mfrow = c(3,4), mar = c(1,1,1,1))
-  success <- lapply(seq_along(ids), function(i){
-    id = ids[[i]]
-    shapes %>% dplyr::filter(.data$component == "setEdge", .data$shape_id == {{id}}) %>%
-      dplyr::pull(.data$xy) %>%
-      sf::st_polygon() %>%
-      plot(main = {{id}})
-  })
+  plots = lapply(shapes, plot_shape_edge)
+  aplot::plot_list(gglist = plots, widths = 1)
 }
+
+#' Plot the set edge of a VennPlotData
+#'
+#' This is for viewing the shape id and appearance of the shape.
+#'
+#' @param x a VennPlotData object
+#'
+#' @return a ggplot object
+#' @export
+#'
+#' @examples
+#'   shape = get_shape_by_id("301")
+#'   plot_shape_edge(shape)
+plot_shape_edge = function(x){
+  if (!inherits(x, "VennPlotData"))
+    stop("Try to plot a non-VennPlotData object. Please check.")
+  id = get_shape_id(x)
+  edge = get_shape_setedge(x)
+  ggplot2::ggplot(edge, aes(.data$X, .data$Y, group = id)) +
+    ggplot2::geom_path() +
+    ggplot2::coord_equal() +
+    ggplot2::labs(title = id) +
+    ggplot2::theme_void() +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+}
+
+

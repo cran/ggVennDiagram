@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -20,7 +20,7 @@ x <- list(A = sample(genes,100),
           G = sample(genes,400))
 
 ## -----------------------------------------------------------------------------
-ggVennDiagram(x, label = "none", edge_size = 2) + scale_fill_distiller(palette = "RdBu")
-ggVennDiagram(x[1:6], label = "none", edge_size = 2) + scale_fill_distiller(palette = "RdBu")
-ggVennDiagram(x[1:5], label = "none", edge_size = 2) + scale_fill_distiller(palette = "RdBu")
+ggVennDiagram(x, label = "none", edge_size = 1) + scale_fill_distiller(palette = "RdBu")
+ggVennDiagram(x[1:6], label = "none", edge_size = 1) + scale_fill_distiller(palette = "RdBu")
+ggVennDiagram(x[1:5], label = "none", edge_size = 1) + scale_fill_distiller(palette = "RdBu")
 

@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -9,12 +9,13 @@ library(ggVennDiagram)
 
 ## -----------------------------------------------------------------------------
 genes <- paste0("gene",1:1000)
-set.seed(20210302)
+set.seed(20231214)
 gene_list <- list(A = sample(genes,100),
                   B = sample(genes,200),
                   C = sample(genes,300),
                   D = sample(genes,200))
 
+## -----------------------------------------------------------------------------
 library(ggVennDiagram)
 library(ggplot2)
 
@@ -23,13 +24,19 @@ venn <- Venn(gene_list)
 data <- process_data(venn)
 ggplot() +
   # 1. region count layer
-  geom_sf(aes(fill = count), data = venn_region(data)) +
+  geom_polygon(aes(X, Y, fill = count, group = id), 
+          data = venn_regionedge(data)) +
   # 2. set edge layer
-  geom_sf(aes(color = id), data = venn_setedge(data), show.legend = FALSE) +
+  geom_path(aes(X, Y, color = id, group = id), 
+          data = venn_setedge(data), 
+          show.legend = FALSE) +
   # 3. set label layer
-  geom_sf_text(aes(label = name), data = venn_setlabel(data)) +
+  geom_text(aes(X, Y, label = name), 
+               data = venn_setlabel(data)) +
   # 4. region label layer
-  geom_sf_label(aes(label = count), data = venn_region(data)) +
+  geom_label(aes(X, Y, label = count), 
+                data = venn_regionlabel(data)) +
+  coord_equal() +
   theme_void()
 
 ## -----------------------------------------------------------------------------
@@ -38,38 +45,22 @@ data
 ## -----------------------------------------------------------------------------
 ggplot() +
   # change mapping of color filling
-  geom_sf(aes(fill = id), data = venn_region(data), show.legend = FALSE) +  
+  geom_polygon(aes(X, Y, fill = id, group = id), 
+          data = venn_regionedge(data),
+          show.legend = FALSE) +
   # adjust edge size and color
-  geom_sf(color="grey", size = 3, data = venn_setedge(data), show.legend = FALSE) +  
+  geom_path(aes(X, Y, color = id, group = id), 
+          data = venn_setedge(data), 
+          linewidth = 3,
+          show.legend = FALSE) +
   # show set label in bold
-  geom_sf_text(aes(label = name), fontface = "bold", data = venn_setlabel(data)) +  
+  geom_text(aes(X, Y, label = name), 
+            fontface = "bold",
+            data = venn_setlabel(data)) +
   # add a alternative region name
-  geom_sf_label(aes(label = name), data = venn_region(data), alpha = 0.5) +  
+  geom_label(aes(X, Y, label = id), 
+             data = venn_regionlabel(data),
+             alpha = 0.5) +
+  coord_equal() +
   theme_void()
-
-## -----------------------------------------------------------------------------
-venn <- Venn(gene_list)
-data <- process_data(venn)
-items <- venn_region(data) %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(text = yulab.utils::str_wrap(paste0(.data$item, collapse = " "),
-                                         width = 40)) %>%
-  sf::st_as_sf()
-label_coord = sf::st_centroid(items$geometry) %>% sf::st_coordinates()
-p <- ggplot(items) +
-  geom_sf(aes_string(fill="count")) +
-  geom_sf_text(aes_string(label = "name"),
-               data = data@setLabel,
-               inherit.aes = F) +
-  geom_text(aes_string(label = "count", text = "text"),
-            x = label_coord[,1],
-            y = label_coord[,2],
-            show.legend = FALSE) +
-  theme_void() +
-  scale_fill_distiller(palette = "RdBu")
-ax <- list(
-  showline = FALSE
-)
-plotly::ggplotly(p, tooltip = c("text")) %>%
-  plotly::layout(xaxis = ax, yaxis = ax)
 

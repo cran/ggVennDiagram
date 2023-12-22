@@ -2,57 +2,34 @@
 % Please edit documentation in R/process_data.R
 \name{venn_data}
 \alias{venn_data}
-\alias{venn_region}
-\alias{venn_setedge}
-\alias{venn_setlabel}
-\alias{process_setEdge_data}
-\alias{process_setLabel_data}
+\alias{process_set_data}
 \alias{process_region_data}
-\title{Get VennPlotData slot}
+\title{Prepare Venn data}
 \usage{
-venn_region(obj)
+process_set_data(venn)
 
-venn_setedge(obj)
-
-venn_setlabel(obj)
-
-process_setEdge_data(venn)
-
-process_setLabel_data(venn)
-
-process_region_data(venn)
+process_region_data(venn, sep = "/")
 }
 \arguments{
-\item{obj}{a S4 class `VennPlotData` object}
-
 \item{venn}{a Venn object}
+
+\item{sep}{name and id separator for intersections}
 }
 \value{
-a tibble, `sf` object
-
 a tibble
 }
 \description{
-Get VennPlotData slot
-
 Prepare Venn data
 }
 \examples{
-\dontrun{
-# obj is VennPlotData
-venn_region(obj)   # return region data
-venn_setlabel(obj) # return setLabel data
-venn_setedge(obj)  # return setEdge data
-}
-x <- list(
+x = list(
 A = sample(letters, 8),
 B = sample(letters, 8),
 C = sample(letters, 8),
 D = sample(letters, 8)
 )
 
-venn <- Venn(x)
+venn = Venn(x)
+process_set_data(venn)
 process_region_data(venn)
-process_setEdge_data(venn)
-process_setLabel_data(venn)
 }

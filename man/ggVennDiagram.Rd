@@ -19,6 +19,7 @@ ggVennDiagram(
   label_txtWidth = 40,
   edge_lty = "solid",
   edge_size = 1,
+  force_upset = FALSE,
   ...
 )
 }
@@ -51,7 +52,9 @@ ggVennDiagram(
 
 \item{edge_size}{line width of set edges (1)}
 
-\item{...}{Other arguments passed on to downstream functions.}
+\item{force_upset}{if TRUE, will always produce Upset plot no matter how many sets have (FALSE)}
+
+\item{...}{useless}
 }
 \value{
 A ggplot object
@@ -59,9 +62,14 @@ A ggplot object
 \description{
 ggVennDiagram main parser
 }
+\details{
+From version 1.4.4, `ggVennDiagram` will plot a upset plot when the number of sets
+is more than 7. Besides, user can switch to a upset plot with `upset_plot()` function.
+Please check the document of this function.
+}
 \examples{
 library(ggVennDiagram)
-x <- list(A=1:5,B=2:7,C=3:6,D=4:9)
+x = list(A=1:5,B=2:7,C=3:6,D=4:9)
 ggVennDiagram(x)  # 4d venn
 ggVennDiagram(x[1:3])  # 3d venn
 ggVennDiagram(x[1:2])  # 2d venn

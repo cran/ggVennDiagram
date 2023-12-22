@@ -1,0 +1,12 @@
+name: ggVennDiagram
+title: ggVennDiagram
+username: bio-spring
+account: bio-spring
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10830598
+bundleId: 8071376
+url: https://bio-spring.shinyapps.io/ggVennDiagram/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
