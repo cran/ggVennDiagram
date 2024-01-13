@@ -1,0 +1,36 @@
+.form-control input {
+  padding: 0rem;
+}
+
+.form-control .control-label {
+  display: none;
+}
+
+.form-group {
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.shiny-input-text, .shiny-input-textarea {
+  border-color: whitesmoke;
+  padding: 0.1rem;
+}
+
+.shiny-input-text {
+  font-weight: bold;
+}
+
+/* move button to right */
+
+
+.action-button {
+  float: right;
+  margin-top: 1rem;
+}
+/* move button to right */
+
+
+
+div.inline {
+  display: flex;
+}

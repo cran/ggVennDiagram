@@ -64,3 +64,59 @@ ggplot() +
   coord_equal() +
   theme_void()
 
+## -----------------------------------------------------------------------------
+set.seed(20231225)
+y = list(
+  A = sample(letters, 8) |> sort(),
+  B = sample(letters, 8) |> sort(),
+  C = sample(letters, 8) |> sort(),
+  D = sample(letters, 8) |> sort())
+
+# view the list
+y
+
+## -----------------------------------------------------------------------------
+ggVennDiagram(y, show_intersect = TRUE, set_color = "black")
+
+## -----------------------------------------------------------------------------
+venn_y = Venn(y)
+
+venn_y
+
+## -----------------------------------------------------------------------------
+# find the overlaping members of two or more sets
+overlap(venn_y, 1:2) # members in both the first two sets
+overlap(venn_y) # members in all the sets
+
+# find the different members between sets and set unions
+discern(venn_y, 1)  # members in set 1, but not in all the resting sets by default
+discern(venn_y, c("A","B"), 3) # members in set A & B, but not in the third set
+
+# find the specific members in one or more sets
+discern_overlap(venn_y, 1)  # specific items in set 1, equals to `discern(venn_y, 1)`. Those members are not shared by all the other sets.
+discern_overlap(venn_y, 1:2)  # specific items in set 1 and set 2
+
+## -----------------------------------------------------------------------------
+venn_plot_data = process_data(venn_y)
+
+# summary of VennPlotData object
+venn_plot_data
+
+## -----------------------------------------------------------------------------
+# get the set data
+venn_set(venn_plot_data)
+
+# get subsets, i.e., regions
+venn_region(venn_plot_data)
+
+## -----------------------------------------------------------------------------
+# get set edge
+venn_setedge(venn_plot_data)
+
+# get region edge
+venn_regionedge(venn_plot_data)
+
+## -----------------------------------------------------------------------------
+df = venn_setedge(venn_plot_data)
+plot(df$X, df$Y, asp = 1)
+

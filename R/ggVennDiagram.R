@@ -23,6 +23,7 @@
 #' @param edge_lty line type of set edges ("solid")
 #' @param edge_size line width of set edges (1)
 #' @param force_upset if TRUE, will always produce Upset plot no matter how many sets have (FALSE)
+#' @inheritParams upset-plot
 #' @param ... useless
 #'
 #' @return A ggplot object
@@ -34,20 +35,25 @@
 #' ggVennDiagram(x[1:3])  # 3d venn
 #' ggVennDiagram(x[1:2])  # 2d venn
 ggVennDiagram = function(x,
-                          category.names = names(x),
-                          show_intersect = FALSE,
-                          set_color = "black",
-                          set_size = NA,
-                          label = c("both","count","percent","none"),
-                          label_alpha = 0.5,
-                          label_geom = c("label","text"),
-                          label_color = "black",
-                          label_size = NA,
-                          label_percent_digit = 0,
-                          label_txtWidth = 40,
-                          edge_lty = "solid",
-                          edge_size = 1,
-                          force_upset = FALSE,
+                         category.names = names(x),
+                         show_intersect = FALSE,
+                         set_color = "black",
+                         set_size = NA,
+                         label = c("both","count","percent","none"),
+                         label_alpha = 0.5,
+                         label_geom = c("label","text"),
+                         label_color = "black",
+                         label_size = NA,
+                         label_percent_digit = 0,
+                         label_txtWidth = 40,
+                         edge_lty = "solid",
+                         edge_size = 1,
+                         force_upset = FALSE,
+                         nintersects = 20,
+                         order.intersect.by = c("size","name","none"),
+                         order.set.by = c("size","name","none"),
+                         relative_height = 3,
+                         relative_width = 0.3,
                           ...){
   if (!is.list(x)){
     stop(simpleError("ggVennDiagram() requires at least a list."))
@@ -77,7 +83,13 @@ ggVennDiagram = function(x,
   }
   else{
     if (!force_upset) warning("Only support 2-7 dimension Venn diagram. Will give a plain upset plot instead.")
-    plot_upset(venn, nintersects = 30, order.intersect.by = "size", order.set.by = "name")
+    plot_upset(venn,
+               nintersects = nintersects,
+               order.intersect.by = order.intersect.by,
+               order.set.by = order.set.by,
+               relative_height = relative_height,
+               relative_width = relative_width,
+               ...)
   }
 }
 
@@ -107,18 +119,19 @@ plot_venn = function(data,
                      edge_lty = "solid",
                      edge_size = 1,
                      ...){
-  p = ggplot(mapping = aes(.data$X, .data$Y))
-  setedge.params = list(data = get_shape_setedge(data),
-                         mapping = aes(color = .data$id,
-                                       group = .data$id),
-                         linetype = edge_lty,
-                         linewidth = edge_size,
-                         # color = set_color,
+  setedge.params = list(data = get_shape_setedge(data, color = set_color,
+                                                 linetype = edge_lty,
+                                                 linewidth = as.numeric(edge_size)),
+                         mapping = aes(color = I(.data$color),
+                                       group = .data$id,
+                                       linetype = I(.data$linetype),
+                                       linewidth = I(.data$linewidth)),
                          show.legend = FALSE)
-  setlabel.params = list(data = get_shape_setlabel(data),
-                          mapping = aes(label = .data$name),
-                          size = set_size,
-                          color = set_color)
+  setlabel.params = list(data = get_shape_setlabel(data, size = as.numeric(set_size), color = set_color),
+                          mapping = aes(label = .data$name,
+                                        size = I(.data$size),
+                                        color = I(.data$color)),
+                          show.legend = FALSE)
   region.params = list(data = get_shape_regionedge(data) |> dplyr::left_join(venn_region(data), by = "id"),
                         mapping = aes(fill = .data$count,
                                       group = .data$id))
@@ -127,10 +140,11 @@ plot_venn = function(data,
   setlabel.layer = do.call('geom_text', setlabel.params)
   region.layer = do.call('geom_polygon', region.params)
 
-  p = p + region.layer + setedge.layer + setlabel.layer + theme_void() + coord_equal()
+  p = ggplot(mapping = aes(.data$X, .data$Y))
+  p_nonlabel = p + region.layer + setedge.layer + setlabel.layer + theme_void() + coord_equal()
 
   if (label == "none"){
-    return(p)
+    return(p_nonlabel)
   }
 
   # process data for plotting region labels
@@ -141,17 +155,18 @@ plot_venn = function(data,
     check_package("plotly")
     region_label = region_label |>
       dplyr::rowwise() |>
-      dplyr::mutate(item = str_wrap(paste0(.data$item, collapse = " "),
+      dplyr::mutate(item = yulab.utils::str_wrap(paste0(.data$item, collapse = " "),
                                                  width = label_txtWidth))
-    p = p + geom_text(aes(label = .data$count, text = .data$item),
-                      data = region_label) +
+    p_plotly = p_nonlabel +
+      geom_text(aes(label = .data$count, text = .data$item),
+                    data = region_label) +
       theme(legend.position = "none")
     ax = list(
       showline = FALSE
     )
-    p = plotly::ggplotly(p, tooltip = c("text")) |>
+    p_plotly = plotly::ggplotly(p_plotly, tooltip = c("text")) |>
       plotly::layout(xaxis = ax, yaxis = ax)
-    return(p)
+    return(p_plotly)
   }
 
   # calculate labels, which are 'percent', 'count', or 'both'
@@ -162,7 +177,7 @@ plot_venn = function(data,
 
   # if label != "none" & show_intersect == FALSE
   if (label_geom == "label"){
-    p = p + geom_label(
+    p_label = p_nonlabel + geom_label(
       aes(label = .data[[label]]),
       data = region_label,
       alpha = label_alpha,
@@ -171,11 +186,11 @@ plot_venn = function(data,
       lineheight = 0.85,
       label.size = NA
     )
-    return(p)
+    return(p_label)
   }
 
   if (label_geom == "text"){
-    p = p + geom_text(
+    p_label = p_nonlabel + geom_text(
       aes(label = .data[[label]]),
       data = region_label,
       alpha = label_alpha,
@@ -183,34 +198,8 @@ plot_venn = function(data,
       size = label_size,
       lineheight = 0.85
     )
-    return(p)
+    return(p_label)
   }
 
 
-}
-
-# from yulab.utils::str_wrap
-str_wrap = function (string, width = getOption("width")){
-  result <- vapply(string, FUN = function(st) {
-    words <- list()
-    i <- 1
-    while (nchar(st) > width) {
-      if (length(grep(" ", st)) == 0)
-        break
-      y <- gregexpr(" ", st)[[1]]
-      n <- nchar(st)
-      y <- c(y, n)
-      idx <- which(y < width)
-      if (length(idx) == 0)
-        idx <- 1
-      words[[i]] <- substring(st, 1, y[idx[length(idx)]] -
-                                1)
-      st <- substring(st, y[idx[length(idx)]] + 1, n)
-      i <- i + 1
-    }
-    words[[i]] <- st
-    paste0(unlist(words), collapse = "\n")
-  }, FUN.VALUE = character(1))
-  names(result) <- NULL
-  result
 }

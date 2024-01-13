@@ -7,10 +7,12 @@
 #'  see "?VennPlotData".
 #'
 #' @source
-#' - `venn:::sets`
-#' - `library("VennDiagram")`
+#' - The `venn` datasets authored by Adrian Dusa (<https://CRAN.R-project.org/package=venn>).
+#'
+#' - Parameters used to generate fancy four set ellipses are adopted from `VennDiagram`(<https://CRAN.R-project.org/package=VennDiagram>).
+#'
 #' - [Wiki](https://upload.wikimedia.org/wikipedia/commons/5/56/6-set_Venn_diagram_SMIL.svg)
-#' @name vennplot-shapes
+#' @name shapes
 #' @docType data
 #' @md
 NULL
@@ -31,6 +33,7 @@ NULL
 #' @import ggplot2
 #' @export
 #' @examples
+#' @md
 #' plot_shapes()
 plot_shapes <- function(){
   plots = lapply(shapes, plot_shape_edge)
