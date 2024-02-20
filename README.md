@@ -9,7 +9,7 @@
 [![](http://cranlogs.r-pkg.org/badges/last-month/ggVennDiagram)](https://cran.r-project.org/package=ggVennDiagram)
 [![](https://img.shields.io/badge/doi-10.3389/fgene.2021.706907-blue.svg)](https://doi.org/10.3389/fgene.2021.706907)
 [![](https://www.r-pkg.org/badges/version/ggVennDiagram?color=green)](https://cran.r-project.org/package=ggVennDiagram)
-[![](https://img.shields.io/badge/devel%20version-1.4.13-green.svg)](https://github.com/gaospecial/ggVennDiagram)
+[![](https://img.shields.io/badge/devel%20version-1.5.2-green.svg)](https://github.com/gaospecial/ggVennDiagram)
 [![](https://codecov.io/gh/gaospecial/ggVennDiagram/branch/master/graph/badge.svg?token=c365345d-e34c-40f6-b2c0-881b5b2841e7)](https://app.codecov.io/gh/gaospecial/ggVennDiagram)
 <!-- badges: end -->
 
@@ -38,10 +38,15 @@ devtools::install_github("gaospecial/ggVennDiagram")
 If you find **ggVennDiagram** is useful and used it in academic papers,
 you may cite this package as:
 
-Gao, C.-H., Yu, G., and Cai, P. (2021). ggVennDiagram: An Intuitive,
-Easy-to-Use, and Highly Customizable R Package to Generate Venn Diagram.
-Frontiers in Genetics 12, 1598. doi:
-[10.3389/fgene.2021.706907](https://www.frontiersin.org/articles/10.3389/fgene.2021.706907/full).
+1.  Gao, C.-H., Chen, C., Akyol, T., Dușa, A., Yu, G., Cao, B., and
+    Cai, P. (2024). ggVennDiagram: intuitive Venn diagram software
+    extended. [iMeta](https://onlinelibrary.wiley.com/journal/2770596x)
+    3, 69. doi:
+    [10.1002/imt2.177](https://onlinelibrary.wiley.com/doi/full/10.1002/imt2.177).
+2.  Gao, C.-H., Yu, G., and Cai, P. (2021). ggVennDiagram: An Intuitive,
+    Easy-to-Use, and Highly Customizable R Package to Generate Venn
+    Diagram. Frontiers in Genetics 12, 1598. doi:
+    [10.3389/fgene.2021.706907](https://www.frontiersin.org/articles/10.3389/fgene.2021.706907/full).
 
 ## Example
 
@@ -184,8 +189,9 @@ combination.
 
 From v1.0, `ggVennDiagram` can plot up to seven dimension Venn plot.
 Please note that the shapes for this five sets diagram, as well as those
-for six and seven sets, are imported from the original package “venn”,
-authored by Adrian Dușa.
+for six and seven sets, are imported from the original package
+[`venn`](https://CRAN.R-project.org/package=venn) authored by Adrian
+Dușa.
 
 However, Venn Diagram for more than four sets may be meaningless in some
 conditions, as some parts may be omitted in such ellipses. Therefore, it

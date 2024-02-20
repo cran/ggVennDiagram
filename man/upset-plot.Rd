@@ -12,6 +12,15 @@ plot_upset(
   order.set.by = c("size", "name", "none"),
   relative_height = 3,
   relative_width = 0.3,
+  top.bar.color = "grey30",
+  top.bar.y.label = NULL,
+  top.bar.show.numbers = TRUE,
+  top.bar.numbers.size = 3,
+  sets.bar.color = "grey30",
+  sets.bar.show.numbers = FALSE,
+  sets.bar.x.label = "Set Size",
+  intersection.matrix.color = "grey30",
+  specific = TRUE,
   ...
 )
 }
@@ -27,6 +36,24 @@ plot_upset(
 \item{relative_height}{the relative height of top panel in upset plot}
 
 \item{relative_width}{the relative width of left panel in upset plot}
+
+\item{top.bar.color}{default is "grey30"}
+
+\item{top.bar.y.label}{default is NULL}
+
+\item{top.bar.show.numbers}{default is TRUE}
+
+\item{top.bar.numbers.size}{text size of numbers}
+
+\item{sets.bar.color}{default is "grey30"}
+
+\item{sets.bar.show.numbers}{default is FALSE}
+
+\item{sets.bar.x.label}{default is "Set Size"}
+
+\item{intersection.matrix.color}{default is "grey30"}
+
+\item{specific}{whether only include specific items in subsets, default is TRUE.}
 
 \item{...}{useless}
 }

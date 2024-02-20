@@ -26,6 +26,15 @@
 #' @param order.set.by 'size', 'name', or "none"
 #' @param relative_height the relative height of top panel in upset plot
 #' @param relative_width the relative width of left panel in upset plot
+#' @param top.bar.color default is "grey30"
+#' @param top.bar.y.label default is NULL
+#' @param top.bar.show.numbers default is TRUE
+#' @param top.bar.numbers.size text size of numbers
+#' @param sets.bar.color default is "grey30"
+#' @param sets.bar.show.numbers default is FALSE
+#' @param sets.bar.x.label default is "Set Size"
+#' @param intersection.matrix.color default is "grey30"
+#' @param specific whether only include specific items in subsets, default is TRUE.
 #' @param ... useless
 #' @return an upset plot
 #'
@@ -46,6 +55,15 @@ plot_upset = function(venn,
                       order.set.by = c("size","name","none"),
                       relative_height = 3,
                       relative_width = 0.3,
+                      top.bar.color = "grey30",
+                      top.bar.y.label = NULL,
+                      top.bar.show.numbers = TRUE,
+                      top.bar.numbers.size = 3,
+                      sets.bar.color = "grey30",
+                      sets.bar.show.numbers = FALSE,
+                      sets.bar.x.label = "Set Size",
+                      intersection.matrix.color = "grey30",
+                      specific = TRUE,
                       ...){
   # process arguments
   order.intersect.by = match.arg(order.intersect.by)
@@ -55,14 +73,23 @@ plot_upset = function(venn,
   data = process_upset_data(venn,
                            nintersects = nintersects,
                            order.intersect.by = order.intersect.by,
-                           order.set.by = order.set.by)
-  p_main = upsetplot_main(data$main_data)
+                           order.set.by = order.set.by,
+                           specific = specific)
+  p_main = upsetplot_main(data$main_data,
+                          intersection.matrix.color = intersection.matrix.color)
 
   # subplot top
-  p_top = upsetplot_top(data$top_data)
+  p_top = upsetplot_top(data$top_data,
+                        top.bar.color = top.bar.color,
+                        top.bar.y.label = top.bar.y.label,
+                        top.bar.show.numbers = top.bar.show.numbers,
+                        top.bar.numbers.size = top.bar.numbers.size)
 
   # subplot left
-  p_left = upsetplot_left(data$left_data)
+  p_left = upsetplot_left(data$left_data,
+                          sets.bar.color = sets.bar.color,
+                          sets.bar.x.label = sets.bar.x.label,
+                          sets.bar.show.numbers = sets.bar.show.numbers)
 
   # combine into a plot
   pp = aplot::insert_top(p_main, p_top, height = relative_height) |>
@@ -72,28 +99,49 @@ plot_upset = function(venn,
   return(pp)
 }
 
-upsetplot_main = function(data){
+upsetplot_main = function(data, ...){
+  param = list(...)
   ggplot2::ggplot(data, aes(.data$id, .data$set)) +
-    ggplot2::geom_point(size = 4, color = "grey30", na.rm = FALSE) +
-    ggplot2::geom_path(aes(group = .data$id), linewidth = 1.5, color = "grey30", na.rm = FALSE) +
+    ggplot2::geom_point(size = 4, color = param$intersection.matrix.color, na.rm = FALSE) +
+    ggplot2::geom_path(aes(group = .data$id), linewidth = 1.5, color = param$intersection.matrix.color, na.rm = FALSE) +
     ggplot2::labs(x = "Set Intersection", y = NULL) +
     theme_upset_main()
 }
 
-upsetplot_top = function(data){
-  ggplot2::ggplot(data, aes(.data$id, .data$size)) +
-    ggplot2::geom_col() +
-    ggplot2::labs(x = NULL, y = NULL) +
+upsetplot_top = function(data, ...){
+  param = list(...)
+  p = ggplot2::ggplot(data, aes(.data$id, .data$size)) +
+    ggplot2::geom_col(fill = param$top.bar.color) +
+    ggplot2::labs(x = NULL, y = param$top.bar.y.label) +
+    scale_y_continuous(expand = ggplot2::expansion(mult = c(0.01, 0.05))) +
     theme_upset_top()
+  if (param$top.bar.show.numbers) {
+    p = p + ggplot2::geom_text(aes(label = .data$size,
+                               y = .data$size + diff(range(.data$size)) * 0.03),
+                               size = param$top.bar.numbers.size)
+  }
+  return(p)
 }
 
-upsetplot_left = function(data){
-  ggplot2::ggplot(data, aes(x = .data$size, y = .data$set)) +
-    ggplot2::geom_col(orientation = "y") +
+upsetplot_left = function(data, ...){
+  param = list(...)
+  p = ggplot2::ggplot(data, aes(x = .data$size, y = .data$set)) +
+    ggplot2::geom_col(orientation = "y", fill = param$sets.bar.color) +
     ggplot2::scale_y_discrete(position = "right") +
     ggplot2::scale_x_reverse() +
-    ggplot2::labs(x = "Set Size", y = NULL) +
+    ggplot2::labs(x = param$sets.bar.x.label, y = NULL) +
     theme_upset_left()
+  if (param$sets.bar.show.numbers) p = show_numbers_x(p, value = "size")
+  return(p)
+}
+
+show_numbers_y = function(p, value){
+
+}
+
+show_numbers_x = function(p, value){
+  p + ggplot2::geom_text(aes(label = .data[[value]]),
+                         vjust = 0.5)
 }
 
 ## (PART) Theme
@@ -138,21 +186,31 @@ theme_upset_left = function(){
 #' process upset data
 #'
 #' @inheritParams upset-plot
-#' @param name_separator will be used to assign subset names
+#' @param specific whether return ONLY specific items for a subset, default is TRUE
+#' @details
+#'  ggVennDiagram, by default, only return the specific subsets of a region.
+#'  However, sometimes, we want to show all the overlapping items for two or more sets.
+#'  For example: https://github.com/gaospecial/ggVennDiagram/issues/64
+#'  Therefore, we add a 'specific' switch to this function. While 'specific = FALSE',
+#'  the seperator will be changed from "/" to "~", and all the overlapping items
+#'  will be returned. This feature is useful in plotting upset plot.
 #'
 #' @return a upsetPlotData object
 process_upset_data = function(venn,
                               nintersects = 30,
                               order.intersect.by = "size",
                               order.set.by = "name",
-                              name_separator = "/"){
-  data = process_region_data(venn, sep = name_separator)
-  data$size = data$count
+                              specific = TRUE){
   set_name = venn@names
+  name_separator = ifelse(specific, "/", "~")
+
+  # region data
+  data = process_region_data(venn, sep = name_separator, specific = specific)
+  data$size = data$count
 
   # top data
   top_data = data |> dplyr::select(c('id', 'name', 'item', 'size'))
-  if (order.intersect.by %in% colnames(top_data)){
+  if (order.intersect.by %in% colnames(top_data)) {
     top_data = dplyr::mutate(top_data,
                              id = forcats::fct_reorder(.data$id, .data[[order.intersect.by]], .desc = TRUE))
   } else {
@@ -163,7 +221,7 @@ process_upset_data = function(venn,
   left_data = dplyr::tibble(set = set_name,
                             name = set_name,
                             size = lengths(venn@sets))
-  if (order.set.by %in% colnames(left_data)){
+  if (order.set.by %in% colnames(left_data)) {
     left_data = dplyr::mutate(left_data,
                               set = forcats::fct_reorder(.data$set, .data[[order.set.by]], .desc = TRUE))
   } else {
@@ -179,7 +237,7 @@ process_upset_data = function(venn,
   main_data$id = factor(main_data$id, levels = levels(top_data$id))
 
   # filter intersections
-  if (is.numeric(nintersects)){
+  if (is.numeric(nintersects)) {
     keep_id = utils::head(levels(top_data$id), nintersects)
     main_data = main_data |> dplyr::filter(.data$id %in% keep_id)
     top_data = top_data |> dplyr::filter(.data$id %in% keep_id)
