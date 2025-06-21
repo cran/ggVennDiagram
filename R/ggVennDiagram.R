@@ -18,11 +18,15 @@
 #' @param label_alpha set 0 to remove the background of region labels
 #' @param label_color color of region labels ("black")
 #' @param label_size size of region labels (NA)
+#' @param label_font font name of labels
+#' @param label_bigMark Type of thousand separator
+#' @param label_bigInterval Position of thousand separator
 #' @param label_percent_digit number of digits when formatting percent label (0)
 #' @param label_txtWidth width of text used in showing intersect members, will be ignored unless show_intersection is TRUE (40)
 #' @param edge_lty line type of set edges ("solid")
 #' @param edge_size line width of set edges (1)
 #' @param force_upset if TRUE, will always produce Upset plot no matter how many sets have (FALSE)
+#' @param shape_id specify a shape by id, run `plot_shapes()` to see available shapes (NULL)
 #' @inheritParams upset-plot
 #' @param ... useless
 #'
@@ -41,6 +45,9 @@ ggVennDiagram = function(x,
                          set_size = NA,
                          label = c("both","count","percent","none"),
                          label_alpha = 0.5,
+                         label_font = "sans",
+                         label_bigInterval = 3L,
+                         label_bigMark = ",",
                          label_geom = c("label","text"),
                          label_color = "black",
                          label_size = NA,
@@ -54,6 +61,7 @@ ggVennDiagram = function(x,
                          order.set.by = c("size","name","none"),
                          relative_height = 3,
                          relative_width = 0.3,
+                         shape_id = NULL,
                           ...){
   if (!is.list(x)){
     stop(simpleError("ggVennDiagram() requires at least a list."))
@@ -65,16 +73,19 @@ ggVennDiagram = function(x,
   label = match.arg(label)
   label_geom = match.arg(label_geom)
   if (dimension <= 7 & !force_upset){
-    data = process_data(venn)
+    data = process_data(venn, shape_id = shape_id)
     plot_venn(data,
               show_intersect = show_intersect,
               set_color = set_color,
               set_size = set_size,
               label = label,
               label_alpha=label_alpha,
+              label_font = label_font,
               label_geom = label_geom,
               label_color = label_color,
               label_size = label_size,
+              label_bigMark = label_bigMark,
+              label_bigInterval = label_bigInterval,
               label_percent_digit = label_percent_digit,
               label_txtWidth = label_txtWidth,
               edge_lty = edge_lty,
@@ -112,9 +123,12 @@ plot_venn = function(data,
                      label = "both",
                      label_geom = "label",
                      label_alpha = 0.5,
+                     label_font = "sans",
                      label_color = "black",
                      label_size = NA,
                      label_percent_digit = 0,
+                     label_bigMark = ",",
+                     label_bigInterval = 3L,
                      label_txtWidth = 40,
                      edge_lty = "solid",
                      edge_size = 1,
@@ -130,7 +144,9 @@ plot_venn = function(data,
   setlabel.params = list(data = get_shape_setlabel(data, size = as.numeric(set_size), color = set_color),
                           mapping = aes(label = .data$name,
                                         size = I(.data$size),
-                                        color = I(.data$color)),
+                                        color = I(.data$color)
+                                      ),
+                         family = label_font,
                           show.legend = FALSE)
   region.params = list(data = get_shape_regionedge(data) |> dplyr::left_join(venn_region(data), by = "id"),
                         mapping = aes(fill = .data$count,
@@ -173,7 +189,7 @@ plot_venn = function(data,
   region_label = region_label |>
     dplyr::mutate(percent = paste(round(.data$count*100/sum(.data$count),
                                         digits = label_percent_digit),"%", sep=""),
-                  both = paste(.data$count,paste0("(",.data$percent,")"),sep = "\n"))
+                  both = paste(format(.data$count, big.mark = label_bigMark, big.interval = label_bigInterval),paste0("(",.data$percent,")"),sep = "\n"))
 
   # if label != "none" & show_intersect == FALSE
   if (label_geom == "label"){
@@ -181,6 +197,7 @@ plot_venn = function(data,
       aes(label = .data[[label]]),
       data = region_label,
       alpha = label_alpha,
+      family = label_font,
       color = label_color,
       size = label_size,
       lineheight = 0.85,
@@ -194,6 +211,7 @@ plot_venn = function(data,
       aes(label = .data[[label]]),
       data = region_label,
       alpha = label_alpha,
+      family = label_font,
       color = label_color,
       size = label_size,
       lineheight = 0.85

@@ -7,9 +7,9 @@
 
 [![](http://cranlogs.r-pkg.org/badges/grand-total/ggVennDiagram)](https://cran.r-project.org/package=ggVennDiagram)
 [![](http://cranlogs.r-pkg.org/badges/last-month/ggVennDiagram)](https://cran.r-project.org/package=ggVennDiagram)
-[![](https://img.shields.io/badge/doi-10.3389/fgene.2021.706907-blue.svg)](https://doi.org/10.3389/fgene.2021.706907)
+[![](https://img.shields.io/badge/doi-10.1002/imt2.177-blue.svg)](https://doi.org/10.1002/imt2.177)
 [![](https://www.r-pkg.org/badges/version/ggVennDiagram?color=green)](https://cran.r-project.org/package=ggVennDiagram)
-[![](https://img.shields.io/badge/devel%20version-1.5.2-green.svg)](https://github.com/gaospecial/ggVennDiagram)
+[![](https://img.shields.io/badge/devel%20version-1.5.3-green.svg)](https://github.com/gaospecial/ggVennDiagram)
 [![](https://codecov.io/gh/gaospecial/ggVennDiagram/branch/master/graph/badge.svg?token=c365345d-e34c-40f6-b2c0-881b5b2841e7)](https://app.codecov.io/gh/gaospecial/ggVennDiagram)
 <!-- badges: end -->
 
@@ -38,15 +38,23 @@ devtools::install_github("gaospecial/ggVennDiagram")
 If you find **ggVennDiagram** is useful and used it in academic papers,
 you may cite this package as:
 
-1.  Gao, C.-H., Chen, C., Akyol, T., Dușa, A., Yu, G., Cao, B., and
-    Cai, P. (2024). ggVennDiagram: intuitive Venn diagram software
-    extended. [iMeta](https://onlinelibrary.wiley.com/journal/2770596x)
-    3, 69. doi:
-    [10.1002/imt2.177](https://onlinelibrary.wiley.com/doi/full/10.1002/imt2.177).
-2.  Gao, C.-H., Yu, G., and Cai, P. (2021). ggVennDiagram: An Intuitive,
-    Easy-to-Use, and Highly Customizable R Package to Generate Venn
-    Diagram. Frontiers in Genetics 12, 1598. doi:
-    [10.3389/fgene.2021.706907](https://www.frontiersin.org/articles/10.3389/fgene.2021.706907/full).
+Gao, C.-H., Chen, C., Akyol, T., Dușa, A., Yu, G., Cao, B., and Cai, P.
+(2024). ggVennDiagram: intuitive Venn diagram software extended.
+[iMeta](https://onlinelibrary.wiley.com/journal/2770596x) 3, 69. doi:
+[10.1002/imt2.177](https://onlinelibrary.wiley.com/doi/full/10.1002/imt2.177).
+
+## Features
+
+![](https://vnote-1251564393.cos.ap-chengdu.myqcloud.com/picgo/202403141008626.png)
+
+**Notes**
+
+The ggVennDiagram Shiny app can be accessed at Shinyapps.io
+(<https://bio-spring.shinyapps.io/ggVennDiagram>), or
+`ggVennDiagram::launch_app()` in local machine.
+
+The [TBtools](https://github.com/CJ-Chen/TBtools-II) plugin can be
+accessed through its plugin store.
 
 ## Example
 
@@ -241,7 +249,8 @@ x$H = sample(genes,500)
 ggVennDiagram(x)
 #> Warning in ggVennDiagram(x): Only support 2-7 dimension Venn diagram. Will give
 #> a plain upset plot instead.
-#> Warning: Removed 1 rows containing missing values (`position_stack()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_col()`).
 ```
 
 <img src="man/figures/README-unnamed-chunk-12-1.png" width="90%" />

@@ -43,10 +43,10 @@ ggVennDiagram(gene_list, set_color = c("blue","black","red","yellow"))
 ggVennDiagram(gene_list, set_size = 8)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  ggVennDiagram(gene_list, label = "count")
-#  ggVennDiagram(gene_list, label = "percent")
-#  ggVennDiagram(gene_list, label = "both")
-#  ggVennDiagram(gene_list, label = "none")
+# ggVennDiagram(gene_list, label = "count")
+# ggVennDiagram(gene_list, label = "percent")
+# ggVennDiagram(gene_list, label = "both")
+# ggVennDiagram(gene_list, label = "none")
 
 ## ----fig.width=12, echo=FALSE-------------------------------------------------
 plots = lapply(c("none","count","percent","both"), function(x){
