@@ -54,7 +54,7 @@ plots = lapply(c("none","count","percent","both"), function(x){
     labs(title = paste0('label = "', x, '"')) +
     theme(legend.position = "none")
 })
-aplot::plot_list(gglist = plots, ncol = 2, labels = LETTERS[1:4])
+aplot::plot_list(gglist = plots)
 
 ## -----------------------------------------------------------------------------
 ggVennDiagram(gene_list, label_percent_digit = 1, label = "percent")
